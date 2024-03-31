@@ -142,6 +142,13 @@ onMounted(async () => {
   await fetchFavorites()
 })
 
+watch(cart, () => {
+  items.value = items.value.map((item) => ({
+    ...item,
+    isAdded: false
+  }))
+})
+
 watch(filters, fetchItems)
 
 provide('cart', {
