@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, provide, reactive, ref, watch } from 'vue'
+import { computed, onMounted, provide, reactive, ref, watch } from 'vue'
 import axios from 'axios'
 
 import Header from '@/components/Header.vue'
@@ -10,6 +10,8 @@ const items = ref([])
 const cart = ref([])
 
 const drawerOpen = ref(false)
+
+const totalPrice = computed(() => cart.value.reduce((acc, item) => acc + item.price, 0))
 
 const closeDrawer = () => {
   drawerOpen.value = false
@@ -124,14 +126,14 @@ provide('cart', {
   closeDrawer,
   openDrawer,
   addToCart,
-  removeFromCart,
+  removeFromCart
 })
 </script>
 
 <template>
   <Drawer v-if="drawerOpen" />
   <div class="bg-white w-4/5 m-auto rounded-xl shadow-xl mt-14">
-    <Header @open-drawer="openDrawer" />
+    <Header :total-price="totalPrice" @open-drawer="openDrawer" />
 
     <div class="p-10">
       <div class="flex justify-between items-center">
