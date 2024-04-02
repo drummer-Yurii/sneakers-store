@@ -11,9 +11,10 @@ const props = defineProps({
   vatPrice: Number
 })
 
-const { cart, closeDrawer } = inject('cart')
+const { cart } = inject('cart')
 
 const isCreating = ref(false)
+const orderId = ref(null)
 
 const createOrder = async () => {
   try {
@@ -23,7 +24,7 @@ const createOrder = async () => {
       totalPrice: props.totalPrice.value
     })
     cart.value = []
-    return data
+    orderId.value = data.id
   } catch (error) {
     console.log(error)
   } finally {
@@ -40,13 +41,22 @@ const buttonDisabled = computed(() => isCreating.value || cartIsEmpty.value)
   <div class="fixed top-0 left-0 h-full w-full bg-black z-10 opacity-70"></div>
   <div class="bg-white w-96 h-full fixed right-0 top-0 z-20 p-8">
     <DrawerHead />
-    <div v-if="!totalPrice" class="flex h-full items-center">
+
+    <div v-if="!totalPrice || orderId" class="flex h-full items-center">
       <InfoBlock
+        v-if="!totalPrice && !orderId"
         title="Cart empty"
         description="Add at least one pair of sneakers to order."
         imageUrl="/package-icon.png"
       />
+      <InfoBlock
+        v-if="orderId"
+        title="Order is processed!"
+        :description="`You order #${orderId} will soon be transfered to courier delivery`"
+        imageUrl="/order-success-icon.png"
+      />
     </div>
+
     <div v-else>
       <CartItemList />
 
