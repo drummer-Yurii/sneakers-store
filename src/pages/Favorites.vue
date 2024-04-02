@@ -19,6 +19,6 @@ onMounted(async () => {
 </script>
 
 <template>
-  <h1>My BookeMarks</h1>
-  <CardList :items="favorites" />
+  <h2 class="text-3xl font-bold mb-8">My BookeMarks</h2>
+  <CardList :items="favorites" is-favorites />
 </template>
